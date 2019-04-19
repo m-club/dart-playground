@@ -2,7 +2,7 @@
 
 这个题目起的比较宽泛，Web应用又分前端/前端服务器/后端服务器，好消息是Dart是一个比较完备的语言，其语言能力可以胜任这些功能的实现，更好的是，dart sdk就提供可以实现这些的基础功能，并且也有可靠的前端/后台框架可以选择。简言之，dart完全可以做全栈。
 
-这一章我们不用其他框架，只用dart sdk自带的功能库，来建一个可交互的网页和一个能响应的后台。
+这一篇我们不用其他框架，只用dart sdk自带的功能库，来建一个可交互的网页和一个能响应的后台。
 
 ## 前置准备
 
@@ -33,9 +33,7 @@ dev_dependencies:
   build_web_compilers: ^1.0.0
 ```
 
-### First edition
-
-我们可以做什么呢？第一个版本简单一点，我们的页面是这样的(index.html)，其中head中的script指向的就是main.dart转成js之后的文件。结构非常简单，就是一个id为my-title的元素。
+我们的起步简单一点，页面是这样的(index.html)，其中head中的script指向的就是main.dart转成js之后的文件。结构非常简单，就是一个id为my-title的元素。
 
 ``` html
 <!DOCTYPE html>
@@ -66,7 +64,7 @@ void main() {
 
 3，2，1，标题内容就变了。这里用了dart sdk中的html库，里面的querySelector方法类似于jQurey中的选择元素，这样就可以绑定html文件中的特定元素，然后修改它们的属性了。
 
-我觉得3s时间太长/短，我觉得标题要更风骚一些怎么办？记得刚刚使用的*web serve*吗，只要你不终止它，它是一直在运行的，更改代码后保存，这时应该能看到terminal下出现：看到Succeeded之后刷新浏览器就可以看到修改过后的代码运行了。
+我觉得3s时间太长/短，我觉得标题要更风骚一些怎么办？记得刚刚使用的*webdev serve*吗，只要你不终止它，它是一直在运行的，更改代码后保存，这时应该能看到terminal下出现：看到Succeeded之后刷新浏览器就可以看到修改过后的代码运行了。
 
 ```
 [INFO] Starting Build
@@ -76,6 +74,8 @@ void main() {
 [INFO] Succeeded after 368ms with 6 outputs (4 actions)
 ```
 
-### Second Edition
+## 数字谜
 
-dart只能改改
+作为一个前端，最主要的功能就是与用户交互，我们之前的功能实在太简陋，最起码要能接收用户的输入，并根据用户的输入来动态更改页面吧。那么我们就来升级一下。
+
+我们来做点什么呢？不如来
