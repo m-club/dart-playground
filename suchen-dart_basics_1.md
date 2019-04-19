@@ -67,7 +67,7 @@ environment:
 dependencies:
   http: ^0.12.0+2
 ```
-2. 在pubspec.yaml所在目录下使用命令*pub get*，这时dart就会到PUB_HOSTED_URL定义地址去下载库，完成后，在文件中就可以引用http这个库啦；
+2. 在pubspec.yaml所在目录下使用命令*pub get*，这时dart就会到PUB_HOSTED_URL定义地址去下载库，完成后，在文件中就可以引用http这个库啦。这时文件夹下会生成一个pubspec.lock，我想它是用来存储当前依赖库版本，以做对照；
 3. 使用http库来完成一次http request：
 ``` dart
 import 'package:http/http.dart' as http;
