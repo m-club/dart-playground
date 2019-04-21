@@ -1,4 +1,4 @@
-# Dart的Web应用
+# Dart的Web应用 之一
 
 这个题目起的比较宽泛，Web应用又分前端/前端服务器/后端服务器，好消息是Dart是一个比较完备的语言，其语言能力可以胜任这些功能的实现，更好的是，dart sdk就提供可以实现这些的基础功能，并且也有可靠的前端/后台框架可以选择。简言之，dart完全可以做全栈。
 
@@ -78,4 +78,91 @@ void main() {
 
 作为一个前端，最主要的功能就是与用户交互，我们之前的功能实在太简陋，最起码要能接收用户的输入，并根据用户的输入来动态更改页面吧。那么我们就来升级一下。
 
-我们来做点什么呢？不如来
+我向来觉得数字有点不可思议，它是完全抽象没有实体的东西，现在却用来表达了有实体世界的方方面面。网上有一个有趣的接口，叫做[NumbersAPI](http://numbersapi.com/#random/math)，可以告诉人们关于数字的有趣事实。但是有一个问题，它是英文的，中文不友好！幸好，现在也有许多翻译接口，比如可以免费调用的[Google翻译](https://ctrlq.org/code/19909-google-translate-api)。
+
+[数字谜](http://www.imandui.com/fun/number_mystery/)就是这样一个简单的app，它提供一个交互，让用户输入或是点击按钮，从NumberAPI中获取数字的英文事实，再调用Google翻译将它们翻译成中文，最后展示给用户。
+
+听起来很简单吧，里面涵盖了用户交互和网页元素修改，这两项就是web app的基石啦。
+
+我们的index.html结构复杂了一些，但也是一目了然，head区增加了css的引用，body区添加了用户输入、按钮以及结果显示区域。
+
+``` html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>数字谜</title>
+    <link rel="stylesheet" href="styles/bulma.css">
+    <link rel="stylesheet" href="my_styles.css">
+    <script defer src="main.dart.js"></script>
+</head>
+
+<body>
+    <div class="box">
+        <div class="title">输入一个你喜欢的四位数</div>
+        <input id="digit-input" type="number" pattern="\d{4}"/>
+        <div class="title">或者 你想掷一下骰子</div>
+        <button id="btn-trivia" class="button is-info">数字琐事</button>
+        <button id="btn-year" class="button is-info">世界那年</button>
+        <button id="btn-day" class="button is-info">世界那天</button>
+        <button id="btn-math" class="button is-info">数学事实</button>
+    </div>
+
+    <div class="result-section">
+        <ul id="result-list"></ul>
+    </div>
+
+</body>
+</html>
+```
+
+### dart中的html模型是什么样子的？
+
+html文件是一个树形结构，大多数语言会把它parse成DOM树，dart也不例外。dart:html库就实现了这个功能，让每一个元素都可以应不同的规则被找到，[官方文档](https://webdev.dartlang.org/tutorials/low-level-html/connect-dart-html#about-the-dart-source-code)中也有说明。
+
+在这个例子中只使用了ButtonElement，InputElement，LIElement，实际上dart:html中定义的element种类很多，有兴趣可以看一下源码。它们都继承自Element，若用到一些通用属性，使用这个也很方便。
+
+每个元素也会有自己的属性，比如说在html中设置button的属性disabled为true，这个按钮就不能被点击了，dart中也提供了修改接口，这里写一个例子：
+
+``` dart
+// 找到需要的input元素
+InputElement digitInput = querySelector("#digit-input");
+// 将disabled属性加到元素属性中去，此时input不可点击使用
+digitInput.setAttribute("disabled", "true");
+// 删除disabled属性，此时input又可再次使用
+digitInput.removeAttribute("disabled");
+```
+
+### 如何handle用户点击／输入事件呢？
+
+[官方文档](https://webdev.dartlang.org/tutorials/low-level-html/add-elements#about-eventlistener-functions)是讲的最好的，这里我也简单写一下，先举一个例子。点击「世界那年」按钮会得到一个随机数字年份的描述，在main.dart中这样来接收处理。
+
+``` dart
+void main() {
+  // 通过元素的id找到这个button
+  ButtonElement year = querySelector("#btn-year");
+  // 然后告诉这个button在被click的时候用randomYear来处理
+  year.onClick.listen(randomYear);
+}
+
+// 定义callback
+void randomYear(Event e) => _getNumericFact(ApiType.random_year);
+```
+
+app元素可以监听的用户事件种类很多，比如说mouse move，key down之类的有二十多个，有空的时候可以试一下，这里有一个小task：**如何使用event判断用户输入了几位数字**，可以自己试着找找如何实现。
+
+### 如何向html中添加／删除元素
+
+html中的父节点子节点是比较宽松的，基本上所有元素都可以添加子节点。dart:html的模型中，每个Element中是有children属性的，可以向里面添加／修改／移除某个元素，children是有顺序的，更改children的排列顺序，就可以移动它在html中的位置。
+
+``` dart
+// 找到unordered list元素
+UListElement resultList = querySelector("#result-list");
+// 新建一个list元素
+final liElement = LIElement();
+// 把这个list元素添加到unordered list中去，tada～ 这时list中就多了一行了
+resultList.children.add(liElement);
+```
+
+## 课后作业
+
+现在，你知道了如何从code中操纵html中的元素，也知道如何获得用户的输入，并且也有API的说明，那么可以试试自己写一下数字谜的网页app啦，或是有什么有趣的想法，都可以自己实现。
