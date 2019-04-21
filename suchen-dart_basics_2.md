@@ -74,7 +74,7 @@ void main() {
 [INFO] Succeeded after 368ms with 6 outputs (4 actions)
 ```
 
-## 数字谜
+## [数字谜](http://www.imandui.com/fun/number_mystery/)
 
 作为一个前端，最主要的功能就是与用户交互，我们之前的功能实在太简陋，最起码要能接收用户的输入，并根据用户的输入来动态更改页面吧。那么我们就来升级一下。
 
@@ -82,7 +82,7 @@ void main() {
 
 [数字谜](http://www.imandui.com/fun/number_mystery/)就是这样一个简单的app，它提供一个交互，让用户输入或是点击按钮，从NumberAPI中获取数字的英文事实，再调用Google翻译将它们翻译成中文，最后展示给用户。
 
-听起来很简单吧，里面涵盖了用户交互和网页元素修改，这两项就是web app的基石啦。
+听起来很简单吧，里面涵盖了**用户交互**和网页**元素修改**，这两项就是web app的基石啦。
 
 我们的index.html结构复杂了一些，但也是一目了然，head区增加了css的引用，body区添加了用户输入、按钮以及结果显示区域。
 
