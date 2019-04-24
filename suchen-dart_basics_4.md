@@ -21,7 +21,7 @@ emmm...理论上来说，知道了1+1=2就了解了数学的本质。可是若�
 
 ### 中文文档传送门
 
-[AngularDart文档翻译](https://github.com/soojade/AngularDart_doc_cn)，这一篇是我觉得翻译得最好的了，这里面基本就包括了官方文档中的内容。里面介绍了AngularDart中的各种特性，可以照着写，也可以当作查询用。
+[AngularDart文档翻译](https://github.com/soojade/AngularDart_doc_cn)，这一篇是我觉得翻译得最好的了，需要说明的是**我们使用的版本是5.2.0，文档是4.0的翻译**，不过不影响整体理解，这里面基本就包括了官方文档中的内容。里面介绍了AngularDart中的各种特性，可以照着写，也可以当作查询用。
 
 ## dart应用文件结构惯例
 
@@ -29,7 +29,7 @@ emmm...理论上来说，知道了1+1=2就了解了数学的本质。可是若�
 
 ![structure](src_4_structure.png)
 
-dart中也有一个便利的工具叫做**stagehand**，可以帮你自动建立一个符合特定需求的文件夹结构。仅使用stagehand会列出你需要的project类型。stagehand不是开发必需的，它只是比较方便。
+dart中也有一个便利的工具叫做`stagehand`，可以帮你自动建立一个符合特定需求的文件夹结构。仅使用stagehand会列出你需要的project类型。stagehand不是开发必需的，它只是比较方便。
 
 ``` bash
 # 安装stagehand
@@ -67,7 +67,7 @@ stagehand <project type>
 
 简单来说，在使用了angular之后，为class添加@Component注解，那么在编译时就会根据参数将这个类作为一个组件。在他处用到这个component时，将它依照规则展开成html+css+dart形式。
 
-Component是彼此独立的，它所引用的css只作用于它所指向的html文件，它类中的变量也不会与其父节点或是子节点混淆。这种封装性使得它可以如零件般随意拆卸安装，也便于维护。以下是get_me_a_dog.dart文件中的关键部分，它提供了\<get-me-a-dog>标签中的所有内容。
+Component是彼此独立的，它所引用的css只作用于它所指向的html文件，它类中的变量也不会与其父节点或是子节点混淆。这种封装性使得它可以如零件般随意拆卸安装，也便于维护。以下是get_me_a_dog.dart文件中的关键部分，它提供了`<get-me-a-dog>`标签中的所有内容。
 
 ``` dart get_me_a_dog.dart
 // 必要包
@@ -80,14 +80,14 @@ import 'package:angular/angular.dart';
     providers: [], // 引用到的其他类，在DI中会说到
     directives: [] // 引用的指令，后面会提到
 )
-class GetMeADogWidget {}
+class GetMeADog {}
 ```
 
 ### 如何引用一个Component
 
 刚刚那个例子是特别简单的，而实际上，一个页面会有许许多多组件构成，比如说我不仅仅想有一条狗，我还想开个动物园，那么狗找到了，可能还要找猫、狐狸、猴子、大象等等等等。每一种动物又都有一个获取的模块，那么我们的结构就得改改了。
 
-首先我们会增加一个主页面模块，来罗列所有的模块，我们给它起名叫main_page.dart。
+首先我们会增加一个主页面模块，来罗列所有的模块，我们给它起名叫`main_page.dart`。
 
 ``` dart
 import 'package:angular/angular.dart';
@@ -103,11 +103,12 @@ import 'package:react_play/src/get_a_fox/get_me_a_fox.dart';
     <get-me-a-cat></get-me-a-cat>
     <get-me-a-fox></get-me-a-fox>
     ''',
-    // 需要在component注册时，告诉angular用到了哪些组件类
+    // 需要在component注册时，告诉angular用到了哪些组件类·
     directives: [GetMeADog, GetMeACat, GetMeAFox]
 )
 class GetMeAZoo {}
 ```
 
+### 不光Component可以模块化
 
-
+比如说在用户点击某段文字时，则会将文字的背景换成荧光黄色，以免跳行。我们可以定义这样一个名叫highlight的指令。
