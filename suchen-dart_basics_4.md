@@ -13,6 +13,12 @@ emmm...理论上来说，知道了1+1=2就了解了数学的本质。可是若�
 
 在前两篇中提到的是基础，但若是使用它们来搭建稍微复杂一点的场景就会有功能模块不好划分，页面结构复杂不好维护等问题。所以，我们需要一个框架，这里我选了**Angular**。
 
+### Angular能做什么
+
+在体验了一回AngularDart开发之后，我觉得Angular的意图有二，一是模块化，将各种操作划分开来，封装成一个模块，使得代码逻辑清晰；二是减少重复性劳动代码。
+
+但为了能让Angular知道你的意图，就需要学习/明白/遵循Angular的一些规范，这就是获得便利的代价了。
+
 ### 中文文档传送门
 
 [AngularDart文档翻译](https://github.com/soojade/AngularDart_doc_cn)，这一篇是我觉得翻译得最好的了，这里面基本就包括了官方文档中的内容。里面介绍了AngularDart中的各种特性，可以照着写，也可以当作查询用。
@@ -33,9 +39,7 @@ cd <your_work_dir>
 stagehand <project type>
 ```
 
-## Angular的设计模式
-
-在体验了一回AngularDart开发之后，我觉得Angular的意图有二，一是模块化，将各种操作划分开来，封装成一个模块，使得代码逻辑清晰；二是减少重复性劳动代码。
+## Angular的模块化
 
 这样说起来太空洞，我来写几个例子。在这一节里若是有不清楚的代码细节可以参考一下[中文文档](https://github.com/soojade/AngularDart_doc_cn)中的相关内容。
 
@@ -49,12 +53,7 @@ stagehand <project type>
 <!DOCTYPE html>
 <html>
   <head>
-    <title>react_play</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="styles/bulma.css">
-    <link rel="icon" type="image/png" href="favicon.png">
-    <script defer src="main.dart.js"></script>
+    ...
   </head>
   <body>
     <get-me-a-dog>Loading...</get-me-a-dog>
@@ -64,40 +63,24 @@ stagehand <project type>
 
 那些按钮提示图片交互汇成了一个tag，也就是<get-me-a-dog>，这就是Angular中的Component啦。
 
-#### 如何定义一个Component
+### 如何定义一个Component
 
-具体到相应的代码(random_dog.dart)中，可以看到每一个Component中，视图是由html+样式表定义的，数据逻辑则在dart文件中（具体代码会放在src_dart_basics_4中）。
+简单来说，在使用了angular之后，为class添加@Component注解，那么在编译时就会根据参数将这个类作为一个组件。在他处用到这个component时，将它依照规则展开成html+css+dart形式。
+
+Component是彼此独立的，它所引用的css只作用于它所指向的html文件，它类中的变量也不会与其父节点或是子节点混淆。这种封装性使得它可以如零件般随意拆卸安装，也便于维护。
 
 ``` dart
-// 使用AngularDart需要引用这个文件
+// 必要包
 import 'package:angular/angular.dart';
-
-// @Component在前修饰GetMeADog类，在编译时就会告诉webdev，这是一个组件
+// 告知‘我是一个组件’
 @Component(
-  // 即在其他html中使用什么tag会唤起这个component  
-  selector: 'get-me-a-dog',
-  // 即这个component的html结构，简单的可以如下编写，复杂的可以使用templateUrl指向一个单独的html文件
-  template: '''
-  <div class="wrapper">
-    <button (click)="getMeADog()" [disabled]="disabled">
-        亲爱的普京，我想要一条...</button>
-    <div>{{randomDog}}</div>
-    <img [src]="imageUrl">
-  </div>
-   ''',
-  styleUrls: ['random_dog.css'],
+    selector: 'get-me-a-dog', // 在它处引用时使用的tag名称
+    templateUrl: 'structure.html', // 组件的html构成
+    styleUrls: ['my_style.css'], // 组件的样式表
+    providers: [], // 引用到的其他类，在DI中会说到
+    directives: [] // 引用的指令，后面会提到
 )
-class GetMeADog {
-
-  String imageUrl = "";
-  String randomDog = "";
-  bool disabled = false;
-
-  void getMeADog() {
-    ...
-    // get a random dog's name and imageUrl
-  }
-}
+class GetMeADogWidget {}
 ```
 
 #### 如何引用一个Component
