@@ -15,7 +15,7 @@ emmm...理论上来说，知道了1+1=2就了解了数学的本质。可是若�
 
 ### Angular能做什么
 
-在体验了一回AngularDart开发之后，我觉得Angular的意图有二，一是模块化，将各种操作划分开来，封装成一个模块，使得代码逻辑清晰；二是减少重复性劳动代码。
+在体验了一回AngularDart开发之后，我觉得Angular的意图有二，一是模块化，将各种操作划分开来，封装成一个个模块，使得代码逻辑清晰；二是减少重复性劳动代码。
 
 但为了能让Angular知道你的意图，就需要学习/明白/遵循Angular的一些规范，这就是获得便利的代价了。
 
@@ -67,9 +67,9 @@ stagehand <project type>
 
 简单来说，在使用了angular之后，为class添加@Component注解，那么在编译时就会根据参数将这个类作为一个组件。在他处用到这个component时，将它依照规则展开成html+css+dart形式。
 
-Component是彼此独立的，它所引用的css只作用于它所指向的html文件，它类中的变量也不会与其父节点或是子节点混淆。这种封装性使得它可以如零件般随意拆卸安装，也便于维护。
+Component是彼此独立的，它所引用的css只作用于它所指向的html文件，它类中的变量也不会与其父节点或是子节点混淆。这种封装性使得它可以如零件般随意拆卸安装，也便于维护。以下是get_me_a_dog.dart文件中的关键部分，它提供了\<get-me-a-dog>标签中的所有内容。
 
-``` dart
+``` dart get_me_a_dog.dart
 // 必要包
 import 'package:angular/angular.dart';
 // 告知‘我是一个组件’
@@ -83,6 +83,31 @@ import 'package:angular/angular.dart';
 class GetMeADogWidget {}
 ```
 
-#### 如何引用一个Component
+### 如何引用一个Component
 
-由于
+刚刚那个例子是特别简单的，而实际上，一个页面会有许许多多组件构成，比如说我不仅仅想有一条狗，我还想开个动物园，那么狗找到了，可能还要找猫、狐狸、猴子、大象等等等等。每一种动物又都有一个获取的模块，那么我们的结构就得改改了。
+
+首先我们会增加一个主页面模块，来罗列所有的模块，我们给它起名叫main_page.dart。
+
+``` dart
+import 'package:angular/angular.dart';
+// 需要引用定义的dart文件
+import 'package:react_play/src/get_a_dog/get_me_a_dog.dart';
+import 'package:react_play/src/get_a_cat/get_me_a_cat.dart';
+import 'package:react_play/src/get_a_fox/get_me_a_fox.dart';
+
+@Component(
+    selector: 'get-me-a-zoo',
+    template: ''' 
+    <get-me-a-dog></get-me-a-dog>
+    <get-me-a-cat></get-me-a-cat>
+    <get-me-a-fox></get-me-a-fox>
+    ''',
+    // 需要在component注册时，告诉angular用到了哪些组件类
+    directives: [GetMeADog, GetMeACat, GetMeAFox]
+)
+class GetMeAZoo {}
+```
+
+
+
