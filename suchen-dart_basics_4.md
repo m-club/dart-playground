@@ -137,7 +137,7 @@ class HighlightDirective {
   }
 }
 ```
-当我们在html文件中使用时，就会有[highlight示例]()这样的效果啦，那么在其他地方是如何引用的呢？首先在html结构中添加`myHighlight`属性，然后在引用这个属性的dart文件中添加引用声明。
+当我们在html文件中使用时，就会有[highlight示例](http://www.imandui.com/fun/highlight/)这样的效果啦，那么在其他地方是如何引用的呢？首先在html结构中添加`myHighlight`属性，然后在引用这个属性的dart文件中添加引用声明。
 
 `html文件`
 ``` html
