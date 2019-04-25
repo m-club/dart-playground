@@ -1,0 +1,13 @@
+.wrapper {
+    max-width: 400px;
+    margin: 10px auto;
+    padding: 15px
+}
+
+.my-title {
+    margin: 15px auto;
+}
+
+.my-button {
+    margin: 15px auto;
+}

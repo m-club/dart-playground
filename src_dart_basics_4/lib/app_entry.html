@@ -1,0 +1,8 @@
+<div class="box my-box">
+    <h1 class="title">Show Some Highlight</h1>
+
+    <div class="wrapper" *ngFor="let poem of poems">
+        <p class="subtitle" myHighlight>{{poem.title}}</p>
+        <p myHighlight>{{poem.contents}}</p>
+    </div>
+</div>
