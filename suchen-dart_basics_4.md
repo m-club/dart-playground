@@ -40,8 +40,9 @@ stagehand <project type>
 ```
 
 ## Angular的模块化
-
 这样说起来太空洞，我来写几个例子。在这一节里若是有不清楚的代码细节可以参考一下[中文文档](https://github.com/soojade/AngularDart_doc_cn)中的相关内容。
+
+这一篇先不要考虑它是如何实现的，可以先从代码的意思来看这块代码实现了个什么功能，这个功能在其他地方是怎么用的。后面会有一篇来写Angular的架构，那里面会有提到这些实现组装的问题。
 
 ### 模块化组件
 
@@ -87,7 +88,7 @@ class GetMeADog {}
 
 刚刚那个例子是特别简单的，而实际上，一个页面会有许许多多组件构成，比如说我不仅仅想有一条狗，我还想开个动物园，那么狗找到了，可能还要找猫、狐狸、猴子、大象等等等等。每一种动物又都有一个获取的模块，那么我们的结构就得改改了。
 
-首先我们会增加一个主页面模块，来罗列所有的模块，我们给它起名叫`main_page.dart`。
+首先我们会增加一个主页面模块，来罗列所有的模块，我们给它起名叫`main_page.dart`。这样各个功能模块里的逻辑视图就能简洁地引用到这个组件中来了，同样，这个组件也可以以同样的方式被引用在其他地方。
 
 ``` dart
 import 'package:angular/angular.dart';
@@ -103,7 +104,8 @@ import 'package:react_play/src/get_a_fox/get_me_a_fox.dart';
     <get-me-a-cat></get-me-a-cat>
     <get-me-a-fox></get-me-a-fox>
     ''',
-    // 需要在component注册时，告诉angular用到了哪些组件类·
+    // 需要在component注册时，告诉angular用到了哪些组件类
+    // directives里面需要写这个组件的类名
     directives: [GetMeADog, GetMeACat, GetMeAFox]
 )
 class GetMeAZoo {}
@@ -111,4 +113,114 @@ class GetMeAZoo {}
 
 ### 不光Component可以模块化
 
-比如说在用户点击某段文字时，则会将文字的背景换成荧光黄色，以免跳行。我们可以定义这样一个名叫highlight的指令。
+比如说在用户点击某段文字时，则会将文字的背景换成荧光黄色，以免跳行。我们可以定义这样一个名叫highlight的指令。这是一个[官方文档](https://webdev.dartlang.org/angular/guide/attribute-directives)中的示例。
+
+``` dart 
+import 'dart:html';
+import 'package:angular/angular.dart';
+// 这里展示了另一个注解，@Directive告诉Angular这个类是一个指令
+// 当tag元素中有myHighlight时，就会调用这个类
+@Directive(selector: '[myHighlight]')
+class HighlightDirective {
+
+  final Element _el;
+  HighlightDirective(this._el);
+
+  @HostListener('mouseenter')
+  void onMouseEnter() { _highlight('yellow'); }
+
+  @HostListener('mouseleave')
+  void onMouseLeave() { _highlight(); }
+
+  void _highlight([String color]) {
+    _el.style.backgroundColor = color;
+  }
+}
+```
+当我们在html文件中使用时，就会有[highlight示例]()这样的效果啦，那么在其他地方是如何引用的呢？首先在html结构中添加`myHighlight`属性，然后在引用这个属性的dart文件中添加引用声明。
+
+`html文件`
+``` html
+<p class="subtitle" myHighlight>子夜四时歌：春歌</p>
+```
+`dart文件`
+``` dart
+import 'package:angular/angular.dart';
+// 需要引用定义的dart文件
+import 'package:path/to/your/directives.dart'
+
+@Component(
+    ...
+    // directives里面添加定义highlight的类名
+    directives: [HighlightDirective]
+)
+```
+
+我以前是没写过css/js/html的，经过这两个月的各种尝试，我觉得highlight的这种功能应该也可以在css中完成，但我认为一是css的结构并不适合阅读与有条理地编写，二是css在多处引用时也许会有问题，所以我偏爱angular的这种处理模式。
+
+### Angular的便利性
+
+还是刚才那个highlight的例子，我们的html文件可以是如下这样，将数据hardcode进去。
+
+``` html
+<p class="subtitle" myHighlight>子夜四时歌：春歌</p>
+    <p myHighlight>
+        秦地罗敷女，采桑绿水边。
+        素手青条上，红妆白日鲜。
+        蚕饥妾欲去，五马莫留连。
+    </p>
+
+    <p class="subtitle" myHighlight>子夜四时歌：夏歌</p>
+    <p myHighlight>
+        镜湖三百里，菡萏发荷花。
+        五月西施采，人看隘若耶。
+        回舟不待月，归去越王家。
+    </p>
+
+    <p class="subtitle" myHighlight>子夜四时歌：秋歌</p>
+    <p myHighlight>
+        长安一片月，万户捣衣声。
+        秋风吹不尽，总是玉关情。
+        何日平胡虏，良人罢远征？
+    </p>
+
+    <p class="subtitle" myHighlight>子夜四时歌：冬歌</p>
+    <p myHighlight>
+        明朝驿使发，一夜絮征袍。
+        素手抽针冷，那堪把剪刀。
+        裁缝寄远道，几日到临洮？
+    </p>
+```
+
+但这种重复出现的段落会trigger程序员写循环的本能，在之前写临时代码时我还真就用java生成了一部分写死的重复性html文件。根据我们第二篇，这个功能是完全可以使用dart:html库来实现的，这并不是一件令人愉快的事情，找id增加元素，添加到元素的children中去，这件事本身也是一种不大需要动脑的体力劳动。
+
+Angular提供了一些便捷修改dom文档结构的指令，我们这里举个NgFor的例子。我们看看修改过后的html是什么样子：
+
+``` html
+<div class="wrapper" *ngFor="let poem of poems">
+    <p class="subtitle" myHighlight>{{poem.title}}</p>
+    <p myHighlight>{{poem.contents}}</p>
+</div>
+```
+里面使用了ngFor，会在相应的dart文件中找一个名叫poems的List，然后遍历它的每一个元素，将每一个元素的title和contents显示出来。这里是hardcode的data，实际中大多是需要从后台拉取的数据。
+``` dart
+class AppEntry {
+  List<Poem> poems = [
+    Poem("子夜四时歌：春歌", "秦地罗敷女，采桑绿水边。素手青条上，红妆白日鲜。蚕饥妾欲去，五马莫留连。"),
+    Poem("子夜四时歌：夏歌", "镜湖三百里，菡萏发荷花。五月西施采，人看隘若耶。回舟不待月，归去越王家。"),
+    Poem("子夜四时歌：秋歌", "长安一片月，万户捣衣声。秋风吹不尽，总是玉关情。何日平胡虏，良人罢远征？"),
+    Poem("子夜四时歌：冬歌", "明朝驿使发，一夜絮征袍。素手抽针冷，那堪把剪刀。裁缝寄远道，几日到临洮？"),
+  ];
+}
+class Poem {
+  String title;
+  String contents;
+  Poem(this.title, this.contents);
+}
+```
+
+## 课后练习
+
+- 试着写一个component，然后引用它
+- 实现一下hightlight directive
+- 使用ngFor来显示一个列表
