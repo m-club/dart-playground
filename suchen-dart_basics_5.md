@@ -57,7 +57,7 @@ class SyntaxPlay {
 <button on-click="doSomething()">Save</button>
 ```
 
-### Angular中的主要指令 NgIf NgFor NgSwitch NgClass
+### Angular中的自带指令 NgIf NgFor NgSwitch NgClass
 
 使用这些指令前，需要在component的directives中声明。
 
@@ -89,4 +89,30 @@ List<String> steps = [...];
 ```
 ![ngfor](src_5_ngfor.png)
 
-`NgSwitch`
+`NgSwitch`的用法稍微复杂一点，它是`NgSwitch`，`NgSwitchCase`以及`NgSwitchDefault`这三个指令的组合，用于根据条件显示某一种component。我一时还没想到合适的场景，我们就来看一下示例，看个意思。写过switch语句的，对于这个就比较好理解了，通过`currentHero.emotion`这个变量的值来与`ngSwitchCase`中的值比对，看显示哪一个tag，若是都比对不上，则显示`ngSwitchDefault`标注的tag。
+
+``` html
+<div [ngSwitch]="currentHero.emotion">
+  <happy-hero    *ngSwitchCase="'happy'"    [hero]="currentHero"></happy-hero>
+  <sad-hero      *ngSwitchCase="'sad'"      [hero]="currentHero"></sad-hero>
+  <confused-hero *ngSwitchCase="'confused'" [hero]="currentHero"></confused-hero>
+  <unknown-hero  *ngSwitchDefault           [hero]="currentHero"></unknown-hero>
+</div>
+```
+
+`NgClass`用于通过一组形如{className: true/false}的Map值，动态更改该元素的css类，从而根据不同状态更改元素的外观。以下为例，
+
+``` html
+<div [ngClass]="{active: isActive, disabled: isDisabled}"></div>
+```
+
+``` css
+.active {...}
+.disabled {...}
+```
+
+``` dart
+// somewhere in class
+bool isActive = true;
+bool isDisabled = false;
+```
