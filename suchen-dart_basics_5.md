@@ -50,4 +50,43 @@ class SyntaxPlay {
 
 ### 绑定 On-Action (...) on-
 
-小括号内是接收的响应类型，等号之后
+小括号内是接收的属性/响应类型，等号之后就是处理它的函数，以下两种写法，效果是等同的：
+
+``` html
+<button (click)="doSomething()">Save</button>
+<button on-click="doSomething()">Save</button>
+```
+
+### Angular中的主要指令 NgIf NgFor NgSwitch NgClass
+
+使用这些指令前，需要在component的directives中声明。
+
+``` dart
+@Component(
+    ...
+    directives: [NgIf, NgFor, NgSwitch, NgClass]
+)
+```
+
+`NgIf`之后跟着一个返回布尔值的表达式，用于决定是否在当前页面保留这个元素。当值为`false`时，会从dom tree中移除这个元素，这和hidden是不一样的。使用时需要在之前加一个星号。
+
+``` html
+<p *ngIf="randomBool()">我是薛定谔的段落</p>
+```
+
+`NgFor`之后会跟着一个固定格式的句子，用来遍历一个集合，并将集合中的每一个元素用于增加一个相应的视图元素。使用时需要在之前加一个星号。
+
+``` html
+<div>姜汁撞奶的做法</div>
+    <ol>
+      <li *ngFor="let step of steps">{{step}}</li>
+    </ol>
+</div>
+```
+``` dart
+// 在定义此component的dart文件中有一个名为steps的可遍历的变量
+List<String> steps = [...];
+```
+![ngfor](src_5_ngfor.png)
+
+`NgSwitch`
