@@ -2,9 +2,7 @@
 
 Angular是一种工具，用于构建你想要的页面，它可以做多页面应用，也可以做单页面应用，不过我觉得它更适合写单页面应用，实际上它也提供了后台match路径来显示不同页面的路由功能，只是它是通过添加/删除页内节点来实现的。
 
-我来举个例子，假设我们的应用地址为：`www.m-club.com/fun/`，里面有两个“页面”，一个是数字谜，一个是狗狗狗，通常来说，他们的地址可能分别是`www.m-club.com/fun/number_mystery/`和`www.m-club.com/fun/get_me_a_dog/`，使用浏览器打开时会分别加载地址映射下的index.html文件，然后通过浏览题运行成视图，处理用户操作。使用Angular的页内路由，为数字谜和狗狗狗分别增加一个路径配置，我们在指向它们时，路径分别为`www.m-club.com/fun/#/number_mystery`和`www.m-club.com/fun/#/get_me_a_dog`。浏览器处理时，会找到`www.m-club.com/fun/`下的index.html文件，然后当页内路由到数字谜和狗狗狗时，在页面中添加他们相应的html元素。
-
-`为了说明方便，以上地址例子使用了HashLocationStrategy`
+我来举个例子，假设我们的应用地址为：`www.m-club.com/fun/`，里面有一个数字谜的子页面，我们把它的路径定为`www.m-club.com/fun/number_mystery/`，当使用浏览器输入这个路径时，它会主动找其地址指向下的index.html文件，这就是加载了两个页面。使用Angular页内路由时，通过页内点击跳转，只是将当前页面的组件元素换成指向组件。
 
 当页面与页面有明确的功能区别时，当然应该当作两个页面来开发，但对于Angular这种写一行hello world也可以收获一万七千多行js代码的架子（笑），需要谨慎对待其中的tradeoff。
 
@@ -117,4 +115,17 @@ class WhateverNameComponent {
 
 ### 这个子页面在哪儿显示的呢
 
+点击了跳转之后，替换的组件是在哪里显示的呢？这需要在主页面上用html模版告知。
 
+``` html
+<!-- 一个实现页内路由的a元素是这样的 -->
+<a  [routerLink]="RoutePaths.numbers.toUrl()">数字谜</a>
+<!-- router-outlet就是插座，用于'页面'展示的地方 -->
+<router-outlet [routes]="Routes.all"></router-outlet>
+```
+
+至此，你应该知道实现Angular页内路由的所有基础知识了。
+
+## 课后练习
+
+我当时看的时候是懵的，大概写写改改好几回才大概知道是怎么回事，所以现在轮到你们懵啦！自己写个页面跳转吧！
