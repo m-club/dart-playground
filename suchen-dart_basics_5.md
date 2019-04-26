@@ -158,3 +158,9 @@ class WhateverName {
 可以看到，当代码中的userName值有变化时，会更新到input框中，同样input改变的值也会改变userName的值，这就是双向绑定了。
 
 ![ngModel](src_5_ngModel.gif)
+
+至此，Angular中最基本的操作应该都有所了解了。反正我当时的感觉是，不问究竟的话，我可以用它来实现任何功能（并不）！
+
+## 课后练习
+
+把它们自己实现一遍～
