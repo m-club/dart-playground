@@ -6,7 +6,7 @@ Angular是一种工具，用于构建你想要的页面，它可以做多页面�
 
 `为了说明方便，以上地址例子使用了HashLocationStrategy`
 
-当页面与页面有明确的功能区别时，当然应该当作两个页面来开发，但对于Angular这种写一行hello world也可以收获一万七千多行js代码的架子（笑），需要谨慎对待其中的tradoff。
+当页面与页面有明确的功能区别时，当然应该当作两个页面来开发，但对于Angular这种写一行hello world也可以收获一万七千多行js代码的架子（笑），需要谨慎对待其中的tradeoff。
 
 ## 添加必要库
 
@@ -37,6 +37,7 @@ www.m-club.com/fun/#/number_mystery
 我比较倾向于使用`HashLocationStrategy`，虽然PathLocationStrategy的路径看起来更符合平常url，但当直接路由至自页面时，浏览器会default寻找其路径下的index.html，但我们知道它只是页内模块，当然会返回404。使用Hashtag就不会有这种歧义，在开发调试时比较方便。当然到生产环境时，比如说子页面就不应该被直接访问到，那么使用PathLocationStrategy就更为合理了。
 
 除了选择路径生成方式，你还需要告诉Angular哪个组件对应哪个地址，这需要配置：
+
 `route_paths.dart`
 ``` dart
 import 'package:angular_router/angular_router.dart';
@@ -59,7 +60,7 @@ class Routes {
   );
 
   static final all = <RouteDefinition>[
-    heroes,
+    numbers,
   ];
 }
 ```
