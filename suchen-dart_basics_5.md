@@ -57,6 +57,13 @@ class SyntaxPlay {
 <button on-click="doSomething()">Save</button>
 ```
 
+上面更改字体大小的三个按钮的响应就是这样写的：
+``` html
+<button (click)="mySize = 10">10px</button>
+<button (click)="mySize = 30">30px</button>
+<button (click)="mySize = 50">50px</button>
+```
+
 ### Angular中的自带指令 NgIf NgFor NgSwitch NgClass
 
 使用这些指令前，需要在component的directives中声明。
@@ -105,14 +112,49 @@ List<String> steps = [...];
 ``` html
 <div [ngClass]="{active: isActive, disabled: isDisabled}"></div>
 ```
-
+`关联的css文件中`
 ``` css
 .active {...}
 .disabled {...}
 ```
-
+`对应的dart类中`
 ``` dart
-// somewhere in class
-bool isActive = true;
+bool isActive = true; // isActive为真时会使用css中的active中样式修饰
 bool isDisabled = false;
 ```
+
+### 双向绑定 NgModel [(ngModel)]
+
+Angular中针对Form有一套对应的指令集，比如绑定，validate，error handling等等，它们也完全可以在代码中自行控制。这里只介绍Form指令中的双向绑定。
+
+`ngModel`与上面提到的4个指令类似，也是一个build-in指令，但它是在angular_form库中定义的，所以需要在`pubspec.yaml`中添加`angular_form`的依赖，然后在dart文件中import相应类，并在directives中声明。
+
+`pubspec.yaml`
+``` yaml
+ dependencies:
+    angular_forms: ^2.1.2
+```
+`模版html文件`
+``` html
+<input type="text" [(ngModel)]="userName">
+<!-- next part is for test -->
+<p>userName: {{userName}}</p>
+<button (click)="changeUserName()">Change Name</button>
+```
+`dart class`
+``` dart
+import 'package:angular_forms/angular_forms.dart';
+@Component (
+    ...
+    directives: [formDeirectives]
+)
+class WhateverName {
+    String userName = "PlaceHolder Name";
+    void changeUserName() {
+        userName = "Changed!";
+    }
+}
+```
+可以看到，当代码中的userName值有变化时，会更新到input框中，同样input改变的值也会改变userName的值，这就是双向绑定了。
+
+![ngModel](src_5_ngModel.gif)
